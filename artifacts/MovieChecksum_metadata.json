@@ -1,0 +1,102 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "movieName",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "checksum",
+						"type": "string"
+					}
+				],
+				"name": "MovieChecksumAdded",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "movieName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "checksum",
+						"type": "string"
+					}
+				],
+				"name": "addMovieChecksum",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "movieName",
+						"type": "string"
+					}
+				],
+				"name": "getMovieChecksum",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"moviechecksum.sol": "MovieChecksum"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"moviechecksum.sol": {
+			"keccak256": "0xc147515cb1fe30dbaccdef5c5be48884fad22a655f7067ba0fdfda1821e55800",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5b218e88352e9274ffe5b945f2c3514a56da6f68dfc0a641fcfab225c9096b07",
+				"dweb:/ipfs/QmZyhKNWUkmAq2TunLf57bMbVgTeS3sRSfwTSJZWcEtJxX"
+			]
+		}
+	},
+	"version": 1
+}

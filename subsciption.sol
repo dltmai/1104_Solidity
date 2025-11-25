@@ -111,6 +111,11 @@ contract Subscription {
         require(expiration[user] >= block.timestamp, "Subscription expired");
         return movies[userPlan];
     }
+    function getMoviesByPlan(uint planId) external view returns (string[] memory) {
+        require(planId >= 1 && planId <= 3, "Invalid planId");
+        Plan plan = Plan(planId);
+        return movies[plan];
+}
 
     function addMovie(Plan plan, string memory movie) external onlyOwner {
         require(plan != Plan.NONE, "Invalid plan");

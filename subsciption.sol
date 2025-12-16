@@ -146,4 +146,139 @@ contract Subscription {
 
         return txList;
     }
+    // ====================================================
+// GOVERNANCE: MOVIE UPLOAD & VOTING
+// ====================================================
+
+enum MovieStatus {
+    PENDING,
+    APPROVED,
+    REJECTED
+}
+
+struct MovieProposal {
+    string title;
+    Plan targetPlan;
+    uint approveVotes;
+    uint rejectVotes;
+    MovieStatus status;
+}
+
+uint public movieProposalCount;
+
+mapping(uint => MovieProposal) public movieProposals;
+mapping(uint => mapping(address => bool)) public hasVotedMovie;
+
+// ================= EVENTS =================
+event MovieProposed(
+    uint indexed proposalId,
+    string title,
+    Plan targetPlan
+);
+
+event MovieVoted(
+    uint indexed proposalId,
+    address voter,
+    bool approve
+);
+
+event MovieApproved(uint indexed proposalId);
+event MovieRejected(uint indexed proposalId);
+
+// ================= FUNCTIONS =================
+
+/// Upload demo movie & choose plan
+function proposeMovie(string memory title, Plan targetPlan) external {
+    require(targetPlan != Plan.NONE, "Invalid plan");
+
+    movieProposalCount++;
+
+    movieProposals[movieProposalCount] = MovieProposal({
+        title: title,
+        targetPlan: targetPlan,
+        approveVotes: 0,
+        rejectVotes: 0,
+        status: MovieStatus.PENDING
+    });
+
+    emit MovieProposed(movieProposalCount, title, targetPlan);
+}
+
+/// Vote approve / reject
+function voteMovie(uint proposalId, bool approve) external {
+    MovieProposal storage proposal = movieProposals[proposalId];
+
+    require(proposal.status == MovieStatus.PENDING, "Voting closed");
+    require(!hasVotedMovie[proposalId][msg.sender], "Already voted");
+
+    // Chỉ user có subscription còn hạn mới được vote
+    require(
+        subscriptions[msg.sender] != Plan.NONE &&
+        expiration[msg.sender] >= block.timestamp,
+        "Only active subscribers can vote"
+    );
+
+    hasVotedMovie[proposalId][msg.sender] = true;
+
+    if (approve) {
+        proposal.approveVotes++;
+    } else {
+        proposal.rejectVotes++;
+    }
+
+    emit MovieVoted(proposalId, msg.sender, approve);
+
+    _checkMovieResult(proposalId);
+}
+
+/// Check threshold & auto add movie
+function _checkMovieResult(uint proposalId) internal {
+    MovieProposal storage proposal = movieProposals[proposalId];
+    uint threshold = _getVoteThreshold(proposal.targetPlan);
+
+    if (proposal.approveVotes >= threshold) {
+        proposal.status = MovieStatus.APPROVED;
+
+        // ✅ AUTO ADD MOVIE TO EXISTING MOVIES MAPPING
+        movies[proposal.targetPlan].push(proposal.title);
+
+        emit MovieApproved(proposalId);
+    }
+
+    if (proposal.rejectVotes >= threshold) {
+        proposal.status = MovieStatus.REJECTED;
+        emit MovieRejected(proposalId);
+    }
+}
+
+/// Vote threshold by plan
+function _getVoteThreshold(Plan plan) internal pure returns (uint) {
+    if (plan == Plan.BASIC) return 5;
+    if (plan == Plan.STANDARD) return 10;
+    if (plan == Plan.PREMIUM) return 15;
+    return 0;
+}
+
+/// View proposal info
+function getMovieProposal(uint proposalId)
+    external
+    view
+    returns (
+        string memory title,
+        Plan plan,
+        uint approveVotes,
+        uint rejectVotes,
+        MovieStatus status
+    )
+{
+    MovieProposal memory p = movieProposals[proposalId];
+    return (
+        p.title,
+        p.targetPlan,
+        p.approveVotes,
+        p.rejectVotes,
+        p.status
+    );
+}
+
 }

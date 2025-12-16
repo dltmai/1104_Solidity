@@ -53,6 +53,82 @@
 				"inputs": [
 					{
 						"indexed": true,
+						"internalType": "uint256",
+						"name": "proposalId",
+						"type": "uint256"
+					}
+				],
+				"name": "MovieApproved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "proposalId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum Subscription.Plan",
+						"name": "targetPlan",
+						"type": "uint8"
+					}
+				],
+				"name": "MovieProposed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "proposalId",
+						"type": "uint256"
+					}
+				],
+				"name": "MovieRejected",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "proposalId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "approve",
+						"type": "bool"
+					}
+				],
+				"name": "MovieVoted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
 						"internalType": "address",
 						"name": "user",
 						"type": "address"
@@ -187,6 +263,45 @@
 						"internalType": "string[]",
 						"name": "",
 						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "proposalId",
+						"type": "uint256"
+					}
+				],
+				"name": "getMovieProposal",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "enum Subscription.Plan",
+						"name": "plan",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "approveVotes",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rejectVotes",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Subscription.MovieStatus",
+						"name": "status",
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -354,6 +469,82 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "hasVotedMovie",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "movieProposalCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "movieProposals",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "enum Subscription.Plan",
+						"name": "targetPlan",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "approveVotes",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rejectVotes",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Subscription.MovieStatus",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "owner",
 				"outputs": [
@@ -364,6 +555,24 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "enum Subscription.Plan",
+						"name": "targetPlan",
+						"type": "uint8"
+					}
+				],
+				"name": "proposeMovie",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -471,6 +680,24 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "proposalId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "approve",
+						"type": "bool"
+					}
+				],
+				"name": "voteMovie",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "withdraw",
 				"outputs": [],
@@ -485,7 +712,17 @@
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"getMovieProposal(uint256)": {
+					"notice": "View proposal info"
+				},
+				"proposeMovie(string,uint8)": {
+					"notice": "Upload demo movie & choose plan"
+				},
+				"voteMovie(uint256,bool)": {
+					"notice": "Vote approve / reject"
+				}
+			},
 			"version": 1
 		}
 	},
@@ -506,11 +743,11 @@
 	},
 	"sources": {
 		"subsciption.sol": {
-			"keccak256": "0xdcd653eae0e2a7b6b56b42cd3c12b7fe0d2530df60b23622098e1da74a2292f5",
+			"keccak256": "0x82c9f6a59f8c7819d909914cc98eb52c2c8880e9366653e99ff45bcca550e99d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7cac0ceb2ab9b8ebbb3f97bb09f590047d6ad65a99d151306cef010c2f944f31",
-				"dweb:/ipfs/QmStV2VojBVf2agTDmf4voip1VFGP4WiXz1MkekxWZHVeQ"
+				"bzz-raw://6f99f00dd976997193cfbd17d6625270ef4a369a600c8b64fa0adc2ab111e944",
+				"dweb:/ipfs/QmeaWfiCGLfSCbCb51eVFituKFXXkNeCNTH7z4XHt1g3Qv"
 			]
 		}
 	},
